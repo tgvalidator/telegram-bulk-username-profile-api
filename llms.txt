@@ -1,25 +1,23 @@
-# TG Validator Telegram Bulk Username Profile Check
-> Official examples for the TG Validator bulk product `tg_username_profile_batch`.
+# TG Validator Telegram bulk username profile check
+> Official asynchronous integration for `tg_username_profile_batch`.
 
-## Canonical resources
-- [Product page](https://tgvalidator.com/products/tg_username_profile_batch): User id, last-seen time, active days, member flag and avatar URL for a whole list of usernames.
-- [API documentation](https://tgvalidator.com/api-docs): Canonical request, response, limit, and error contract.
-- [GitHub repository](https://github.com/tgvalidator/telegram-bulk-username-profile-api): Official multi-language examples and OpenAPI contract.
-- [Registration](https://tgvalidator.com/register): Account registration and API-key access.
-- [Pricing](https://tgvalidator.com/pricing): Current product pricing.
+## Resources
+- Product: https://tgvalidator.com/products/tg_username_profile_batch
+- API documentation: https://tgvalidator.com/api-docs
+- Repository: https://github.com/tgvalidator/telegram-bulk-username-profile-api
+- Registration: https://tgvalidator.com/register?utm_source=github&utm_medium=referral&utm_campaign=tgvalidator_telegram-bulk-username-profile-api
+- Pricing: https://tgvalidator.com/pricing
+- OpenAPI: openapi.yaml
 
-## Product facts
-- Brand: TG Validator.
-- Product code: tg_username_profile_batch.
-- Mode: asynchronous bulk task.
-- API base URL: https://tgvalidator.com.
-- Authentication: X-API-Key request header.
-- Submit: POST /api/v1/bulk-tasks with product=tg_username_profile_batch and a file field.
-- Poll: GET /api/v1/bulk-tasks/{id}; status is processing, success or failed.
-- Poll interval: no more than once every 30 seconds.
-- Task size: 1000 to 100000 entries, .txt or .csv, one Telegram username per line (the leading `@` is optional).
-- Input kind: username.
-- Country: not applicable, the field is not sent.
-- Result columns: username, activated, uid, lastseen, activedays, member, avatar_url.
-- Billing: the file is reserved on submit; only checked entries are charged and the rest is returned. Failed tasks are refunded.
-- Examples: Python, Node.js, Go, Java, C#, PHP, Shell.
+## Contract
+- Base URL: https://tgvalidator.com; authentication: X-API-Key.
+- Submit POST /api/v1/bulk-tasks with service_type=tg_username_profile_batch, then file. The response field remains data.product.
+- Input: username, 1000–500000 valid entries. No country field is required.
+- Poll GET /api/v1/bulk-tasks/{id} at least 30 seconds apart. Status: processing, success, failed. A successful task may carry result_url; a missing link is a reason to query again, not resubmit.
+- Result columns, in order: identifier, activated, uid, activedays, avatar_url.
+- Processing counters are provisional while preparing=true. Final success/failure counts only appear after success.
+- No pricing/reservation quote is returned by the public API. Read current pricing separately.
+- Use Idempotency-Key for a retry of the same submission; never blindly resubmit after an uncertain timeout.
+- Example input files are format fixtures, not valid production-sized batches.
+
+Last reviewed: 2026-10-30.
